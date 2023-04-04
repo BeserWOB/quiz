@@ -8,7 +8,7 @@ import he from 'he';
 
 
 export default function App(){
-
+  
   const[isGameOn, setIsGameOn] = React.useState(false);
   const[questions, setQuestions] = React.useState([{
     question: "",
@@ -17,12 +17,16 @@ export default function App(){
     id: uuidv4(),
     isSelected: false,
   }]);
-
+  const styles = {display: isGameOn ? "block" : "none"};
+  
   function start(url){
     setIsGameOn(true);
     getData(url);
   }
 
+  function checkAnswers(){
+    
+  }
 
 
 
@@ -45,12 +49,6 @@ export default function App(){
       console.error(error);
     }
   }
-  
-  function handleClick(e, id, index){
-    const selectedQuestion = document.getElementById(id);
-    const correctAnswer = questions[index].correctAnswer;
-    const userAnswer = e.target.value;
-}
 
   return(
     <main>
@@ -63,10 +61,10 @@ export default function App(){
         <Question
           key={index} 
           data={question}
-          handleClick={(e)=>handleClick(e, question.id, index)}
+          isGameOn={isGameOn}
           />
       )}
-
+      <button className="check--answers-btn" style={styles} onClick={checkAnswers}>Check answers</button>
       <Footer />
     </main>
   )
