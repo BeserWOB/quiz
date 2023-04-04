@@ -25,7 +25,7 @@ export default function Start(props){
     return(
         <main className="start--page" style={styles}>
             <h1>Quizzical</h1>
-            <p>Test your knowlege</p>
+            <p>Test your knowlege.</p>
             <button onClick={()=>start(url)}>Start Quiz</button>
 
             <label htmlFor="questionsNumber">Number of questions:

@@ -77,7 +77,50 @@ footer{
   bottom: 0;
   left: calc(50% - 204px);
   margin: 0;
-  
-
   color: #293264;
+}
+.questions--page{
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 2rem;
+  padding: 1rem;
+
+}
+.questions--page > h3{
+  font-family: 'Karla';
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #293264;
+}
+.btn{
+  font-family: 'Inter';
+  font-weight: 500;
+  font-size: 1.2rem;
+  text-align: center;
+  color: #293264;
+  padding: .5rem 2rem;
+  border: 0.8px solid #4D5B9E;
+  border-radius: 8px; 
+}
+.buttons--container{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1em;
+}
+.check--answers-btn{
+  font-family: 'Inter';
+  background: #4D5B9E;
+  border-radius: 15px;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #F5F7FB;
+  padding: .8rem 3rem;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.8);
+  margin: 5rem auto;
+  display: none;
 }
