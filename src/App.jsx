@@ -16,7 +16,6 @@ export default function App(){
     correctAnswer: "",
     id: uuidv4(),
     isSelected: false,
-    isCorrect: false
   }]);
 
   function start(url){
@@ -39,7 +38,6 @@ export default function App(){
         correctAnswer: he.decode(result.correct_answer),
         id: uuidv4(),
         isSelected: false,
-        isCorrect: false
       }))
       setQuestions(questionsArray)
 
@@ -52,8 +50,6 @@ export default function App(){
     const selectedQuestion = document.getElementById(id);
     const correctAnswer = questions[index].correctAnswer;
     const userAnswer = e.target.value;
-
-
 }
 
   return(
@@ -64,11 +60,11 @@ export default function App(){
       />
 
       {questions.map((question, index) => 
-      <Question
+        <Question
           key={index} 
           data={question}
           handleClick={(e)=>handleClick(e, question.id, index)}
-          />  
+          />
       )}
 
       <Footer />
