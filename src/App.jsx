@@ -4,6 +4,7 @@ import Question from "./Question";
 import Footer from "./Footer";
 import { v4 as uuidv4 } from 'uuid';
 import he from 'he';
+import Confetti from 'react-confetti'
 
 
 
@@ -24,26 +25,33 @@ export default function App(){
       const data = await response.json();
       const resultsArray = data.results;
   
-      const questionsArray = resultsArray.map(result=> ({
-        question: he.decode(result.question),
-        answers: ([...result.incorrect_answers, result.correct_answer]).sort(function(){return 0.5 - Math.random()}), 
-        correctAnswer: he.decode(result.correct_answer),
-        id: uuidv4(),
-        selectedAnswer: "",
-        isCorrect: false,
-      }))
-      setQuestions(questionsArray)
+      const questionsArray = resultsArray.map(result => {
+        const answers = ([...result.incorrect_answers, result.correct_answer]).sort(function(){return 0.5 - Math.random()});
+        return {
+          question: he.decode(result.question),
+          answers: answers.map((answer) => {
+            return {
+              id: uuidv4(),
+              answer: he.decode(answer),
+            };
+          }),
+          correctAnswer: he.decode(result.correct_answer),
+          id: uuidv4(),
+          selectedAnswer: "",
+          isCorrect: false,
+        };
+      })
       
-
+      setQuestions(questionsArray);
       } catch (error) {
       console.error(error);
     }
   }
 
   function selectAnswer(e, id){
-
     const selectedButton = e.target;
     const buttons = selectedButton.parentElement.querySelectorAll('button');
+    
     buttons.forEach(button => {
         if (button === selectedButton) {
             button.style.backgroundColor = '#D6DBF5';
@@ -51,13 +59,12 @@ export default function App(){
             button.style.backgroundColor = 'transparent';
         }
     });
-
     setQuestions(prevQuestion=>{
         const updatedQuestion = prevQuestion.map(question=>{
             if(question.id === id){
                 return{
                     ...question,
-                    selectedAnswer: e.target.value
+                    selectedAnswer: e.target.id
                 }
             }else{
                 return question
@@ -68,17 +75,24 @@ export default function App(){
 }
 
 function checkAnswers(){
-  let count = 0;
+
+  let correctCount = 0;
   questions.forEach(question => {
-    if(question.correctAnswer === question.selectedAnswer){
-      count++
+
+    const selectedButton = document.querySelector(`button[id="${question.selectedAnswer}"]`);
+    const correctButton = document.querySelector(`button[value="${question.correctAnswer}"]`);
+
+    if (question.correctAnswer === selectedButton.value) {
+      correctCount++;
+      selectedButton.style.backgroundColor = '#94D7A2';
+    } else {
+      selectedButton.style.backgroundColor = '#FFC8C8';
+      correctButton.style.backgroundColor = '#94D7A2';
     }
-  })
-  setScore(count)
-  setEndGame(true)
+  });
+  setScore(correctCount);
+  setEndGame(true);  
 }
-
-
   return(
     <main>
         {!isGameOn && <Start 
@@ -94,11 +108,12 @@ function checkAnswers(){
           />)}
         {isGameOn && 
         <div className="solution--container">
-          <button className="check--answers-btn"onClick={checkAnswers}>{!endGame? "Check answers" : "Play again"}</button>
+          <button className="check--answers-btn" onClick={checkAnswers}>{!endGame? "Check answers" : "Play again"}</button>
           {endGame && <h3>You scored {score}/{questions.length} correct answers.</h3>}
         </div>
         }
       <Footer />
+      {endGame && <Confetti />}
     </main>
   )
 }
