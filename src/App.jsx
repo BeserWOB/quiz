@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Start from "./Start";
 import Question from "./Question"; 
 import Footer from "./Footer";
@@ -9,9 +9,10 @@ import he from 'he';
 
 export default function App(){
   
-  const[isGameOn, setIsGameOn] = React.useState(false);
-  const[questions, setQuestions] = React.useState([]);
-  const[score, setScore] = React.useState(0);
+  const[isGameOn, setIsGameOn] = useState(false);
+  const[endGame, setEndGame] = useState(false);
+  const[questions, setQuestions] = useState([]);
+  const[score, setScore] = useState(0);
   function start(url){
     setIsGameOn(true);
     getData(url);
@@ -74,8 +75,10 @@ function checkAnswers(){
     }
   })
   setScore(count)
+  setEndGame(true)
 }
-console.log(score);
+
+
   return(
     <main>
         {!isGameOn && <Start 
@@ -89,8 +92,12 @@ console.log(score);
           key={index}
           selectAnswer={selectAnswer}
           />)}
-        {isGameOn && <button className="check--answers-btn"onClick={checkAnswers}>Check answers</button>}
-        <h3>You scored {score}/{questions.length} correct answers</h3>
+        {isGameOn && 
+        <div className="solution--container">
+          <button className="check--answers-btn"onClick={checkAnswers}>{!endGame? "Check answers" : "Play again"}</button>
+          {endGame && <h3>You scored {score}/{questions.length} correct answers.</h3>}
+        </div>
+        }
       <Footer />
     </main>
   )
