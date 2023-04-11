@@ -11,7 +11,7 @@ export default function App(){
   
   const[isGameOn, setIsGameOn] = React.useState(false);
   const[questions, setQuestions] = React.useState([]);
-
+  const[score, setScore] = React.useState(0);
   function start(url){
     setIsGameOn(true);
     getData(url);
@@ -67,21 +67,21 @@ export default function App(){
 }
 
 function checkAnswers(){
-  questions.map(question => {
+  let count = 0;
+  questions.forEach(question => {
     if(question.correctAnswer === question.selectedAnswer){
-      alert("bravo")
-    } else {
-      alert("try again")
+      count++
     }
   })
+  setScore(count)
 }
-
+console.log(score);
   return(
     <main>
-      {!isGameOn && <Start 
-        start={start} 
-        isGameOn={isGameOn}
-      />}
+        {!isGameOn && <Start 
+          start={start} 
+          isGameOn={isGameOn}
+        />}
 
         {isGameOn && questions.map((question, index)=> <Question
           data={question}
@@ -89,10 +89,8 @@ function checkAnswers(){
           key={index}
           selectAnswer={selectAnswer}
           />)}
-        
-        
-
-      {isGameOn && <button className="check--answers-btn"onClick={checkAnswers}>Check answers</button>}
+        {isGameOn && <button className="check--answers-btn"onClick={checkAnswers}>Check answers</button>}
+        <h3>You scored {score}/{questions.length} correct answers</h3>
       <Footer />
     </main>
   )
