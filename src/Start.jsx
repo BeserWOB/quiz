@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 export default function Start(props){
 
 
-    const styles = {display: props.isGameOn ? "none" : "flex"}
     const { start } = props;
     const [numberOfQuestions, setNumberOfQuestions] = useState(3);
     const [difficulty, setDifficulty] = useState("easy");
@@ -23,7 +22,7 @@ export default function Start(props){
     }
 
     return(
-        <main className="start--page" style={styles}>
+        <main className="start--page">
             <h1>Quizzical</h1>
             <p>Test your knowlege.</p>
             <button onClick={()=>start(url)}>Start Quiz</button>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Start from "./Start";
 import Question from "./Question"; 
 import Footer from "./Footer";
@@ -10,25 +10,12 @@ import he from 'he';
 export default function App(){
   
   const[isGameOn, setIsGameOn] = React.useState(false);
-  const[questions, setQuestions] = React.useState([{
-    question: "",
-    answers: [],
-    correctAnswer: "",
-    id: uuidv4(),
-    isSelected: false,
-  }]);
-  const styles = {display: isGameOn ? "block" : "none"};
-  
+  const[questions, setQuestions] = React.useState([]);
+
   function start(url){
     setIsGameOn(true);
     getData(url);
   }
-
-  function checkAnswers(){
-    
-  }
-
-
 
   async function getData(url) { 
     try {
@@ -38,33 +25,74 @@ export default function App(){
   
       const questionsArray = resultsArray.map(result=> ({
         question: he.decode(result.question),
-        answers: ([...result.incorrect_answers, result.correct_answer]).sort(function(){return 0.5 - Math.random()}),
+        answers: ([...result.incorrect_answers, result.correct_answer]).sort(function(){return 0.5 - Math.random()}), 
         correctAnswer: he.decode(result.correct_answer),
         id: uuidv4(),
-        isSelected: false,
+        selectedAnswer: "",
+        isCorrect: false,
       }))
       setQuestions(questionsArray)
+      
 
       } catch (error) {
       console.error(error);
     }
   }
 
+  function selectAnswer(e, id){
+
+    const selectedButton = e.target;
+    const buttons = selectedButton.parentElement.querySelectorAll('button');
+    buttons.forEach(button => {
+        if (button === selectedButton) {
+            button.style.backgroundColor = '#D6DBF5';
+        } else {
+            button.style.backgroundColor = 'transparent';
+        }
+    });
+
+    setQuestions(prevQuestion=>{
+        const updatedQuestion = prevQuestion.map(question=>{
+            if(question.id === id){
+                return{
+                    ...question,
+                    selectedAnswer: e.target.value
+                }
+            }else{
+                return question
+            }
+        })
+        return updatedQuestion
+    })
+}
+
+function checkAnswers(){
+  questions.map(question => {
+    if(question.correctAnswer === question.selectedAnswer){
+      alert("bravo")
+    } else {
+      alert("try again")
+    }
+  })
+}
+
   return(
     <main>
-      <Start 
+      {!isGameOn && <Start 
         start={start} 
         isGameOn={isGameOn}
-      />
+      />}
 
-      {questions.map((question, index) => 
-        <Question
-          key={index} 
+        {isGameOn && questions.map((question, index)=> <Question
           data={question}
           isGameOn={isGameOn}
-          />
-      )}
-      <button className="check--answers-btn" style={styles} onClick={checkAnswers}>Check answers</button>
+          key={index}
+          selectAnswer={selectAnswer}
+          />)}
+        
+        
+
+      {isGameOn && <button className="check--answers-btn"onClick={checkAnswers}>Check answers</button>}
       <Footer />
     </main>
   )

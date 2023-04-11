@@ -1,33 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import he from "he";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Question(props) {
-    const styles = {display: props.isGameOn ? "flex" : "none"};
-    const [selectedAnswer, setSelectedAnswer] = useState(null);
-    const correctAnswer = props.data.correctAnswer;
-    
-    const handleAnswerClick = (e) => {
-        setSelectedAnswer(e.target.value);
-    };
-
-
-
-    return (
-    <div className="questions--page" style={styles}>
-      <h3>{props.data.question}</h3>
+  /* console.log(props); */
+  return(
+    <div className="questions--page">
+      <h3 >{he.decode(props.data.question)}</h3>
       <div className="buttons--container">
-      {props.data.answers.map((answer, index) => (
-        <button
-          className="btn"
-          onClick={handleAnswerClick}
-          value={he.decode(answer)}
-          key={index}
-          style={{
-            backgroundColor: selectedAnswer === he.decode(answer) ? "#D6DBF5" : "white",
-            color: selectedAnswer === he.decode(answer) ? "white" : "#293264"
-          }}>{he.decode(answer)}</button>
-      ))}
+        {props.data.answers.map((answer, index)=> <button 
+            className="btn" 
+            key={index}
+            onClick={(e)=>props.selectAnswer(e, props.data.id)}
+            value={he.decode(answer)}
+            >
+        {he.decode(answer)}</button>)}
       </div>
     </div>
-  );
+  )
 }
