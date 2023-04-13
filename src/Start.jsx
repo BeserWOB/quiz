@@ -23,8 +23,8 @@ export default function Start(props){
 
     return(
         <main className="start--page">
-            <h1>Quizzical</h1>
-            <p>Test your knowlege.</p>
+            <h1>Mind Games</h1>
+            <p>Engage Your Mind and Test Your Intellect with a Wide Variety of Trivia and Puzzle Challenges.</p>
             <button onClick={()=>start(url)}>Start Quiz</button>
 
             <label htmlFor="questionsNumber">Number of questions:
@@ -32,6 +32,7 @@ export default function Start(props){
                 <option value="3">3</option>
                 <option value="6">6</option>
                 <option value="9">9</option>
+                <option value="12">12</option>
             </select>
             </label>
 

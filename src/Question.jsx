@@ -8,7 +8,7 @@ export default function Question(props) {
     <div className="questions--page">
       <h3 >{props.data.question}</h3>
       <div className="buttons--container">
-        {props.data.answers.map((answer, index)=> <button 
+        {props.data.answers.map((answer)=> <button 
             className="btn" 
             key={answer.id}
             id={answer.id}
